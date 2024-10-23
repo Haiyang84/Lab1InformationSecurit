@@ -66,9 +66,9 @@ set *0xffffd728 = 0xffffd720
 - Install bWapp (refer to quang-ute/Security-labs/Web-security). 
 - Install sqlmap.
 - Write instructions and screenshots in the answer sections. Strictly follow the below structure for your writeup.
+  
 **Question 1**: Use sqlmap to get information about all available databases
 **Answer 1**:
-## 1. Install sqlmap.
 ```sh
 git clone https://github.com/sqlmapproject/sqlmap.git
 ```
